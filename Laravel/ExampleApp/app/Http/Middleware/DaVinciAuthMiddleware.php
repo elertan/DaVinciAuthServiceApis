@@ -24,13 +24,13 @@ class DaVinciAuthMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->cookie('token')) {
+        if (!$request->cookie('DaVinciAuthToken')) {
             // This user is not logged in.
             return redirect(env('DAVINCIAUTH_NOT_AUTHORIZED_REDIRECT_URL'));
         }
         // Use the guzzle library to make an api call to check for a valid token
         $client = new Client();
-        $url = env('DAVINCIAUTH_VALIDATE_URL') . $request->cookie('token');
+        $url = env('DAVINCIAUTH_VALIDATE_URL') . $request->cookie('DaVinciAuthToken');
         
         $response = $client->get($url);
         $body = $response->getBody();
@@ -47,7 +47,7 @@ class DaVinciAuthMiddleware
         $this->auth->user = $decoded;
 
         // Add the token in the cookies again with the response
-        return $next($request)->withCookie(cookie('token', $token, 900000));
+        return $next($request)->withCookie(cookie('DaVinciAuthToken', $token, 900000));
     }
 
 }

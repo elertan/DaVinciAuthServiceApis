@@ -16,8 +16,16 @@ DAVINCIAUTH_VALIDATE_URL=http://davinciauthservice.nl/Sso/ValidateAuth/cb1e444c-
 DAVINCIAUTH_KEY=mysecretkeyontheauthservice
 DAVINCIAUTH_NOT_AUTHORIZED_REDIRECT_URL=/login
 
+And add these lines to the composer.json
+"require": {
+    "guzzlehttp/guzzle": "~6.0",
+    "firebase/php-jwt": "~4.0"
+},
+(Don’t recreate the require key if it exists already, simply just add the lines inside)
+
 Now to use the api, use the following code as an example.
 
+web.php
 <?php
 
 use App\Http\Middleware\DaVinciAuthMiddleware;
@@ -29,7 +37,7 @@ Route::get(‘/loginCallback’, function (Request $request, CookieJar $cookieJa
 	return $auth->login($request, $cookieJar);
 });
 
-Route::get(‘logout’, function (Request $request, CookieJar $cookieJar) {
+Route::get(‘/logout’, function (Request $request, CookieJar $cookieJar) {
 	$auth->logout($cookieJar);
 	return redirect(‘/‘);
 });
