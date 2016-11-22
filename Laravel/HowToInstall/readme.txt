@@ -23,6 +23,8 @@ And add these lines to the composer.json
 },
 (Don’t recreate the require key if it exists already, simply just add the lines inside)
 
+Run composer update to install the missing dependencies
+
 Now to use the api, use the following code as an example.
 
 web.php
