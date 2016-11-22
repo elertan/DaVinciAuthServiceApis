@@ -35,15 +35,19 @@ use App\DaVinciAuthService\DaVinciAuth;
 use Illuminate\Http\Request;
 use Illuminate\Cookie\CookieJar;
 
-Route::get(‘/loginCallback’, function (Request $request, CookieJar $cookieJar, DaVinciAuth $auth) {
+Route::get('/loginCallback', function (Request $request, CookieJar $cookieJar, DaVinciAuth $auth) {
 	return $auth->login($request, $cookieJar);
 });
 
-Route::get(‘/logout’, function (Request $request, CookieJar $cookieJar) {
+Route::get('/logout', function (Request $request, CookieJar $cookieJar, DaVinciAuth $auth) {
 	$auth->logout($cookieJar);
-	return redirect(‘/‘);
+	return redirect('/');
 });
 
-Route::get(‘/account’, function (Request $request, DaVinciAuth $auth) {
-	dd($auth->user);
+Route::get('/account', function (Request $request, DaVinciAuth $auth) {
+	return view('account', ['user' => $auth->user]);
 })->middleware(DaVinciAuthMiddleware::class);
+
+Route::get('/', function () {
+    return view('welcome');
+});
